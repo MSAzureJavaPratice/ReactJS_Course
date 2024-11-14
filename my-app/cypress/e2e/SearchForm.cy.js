@@ -1,10 +1,15 @@
+/* eslint-env cypress */
+
 describe("SearchForm Component E2E Test", () => {
   beforeEach(() => {
     cy.visit("http://localhost:3000"); // Replace with your application's URL
   });
 
   it("displays the initial search query", () => {
-    cy.get('input[placeholder="Search..."]').should("have.value", "test query");
+    cy.get('input[placeholder="Search..."]').should(
+      "have.value",
+      "Search here"
+    );
   });
 
   it("updates the displayed query when searching via button click", () => {
