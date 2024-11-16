@@ -7,12 +7,13 @@ const MovieTile = ({ movie, onClick, onEdit, onDelete }) => {
   const [showMenu, setShowMenu] = useState(false);
 
   const handleMenuClick = (e) => {
-    e.stopPropagation();
-    setShowMenu(!showMenu);
+    e.stopPropagation(); // Prevent click from triggering parent onClick
+    setShowMenu((prev) => !prev);
   };
 
   const handleMenuItemClick = (action) => {
     setShowMenu(false);
+    console.log(`${action} clicked for movie:`, movie);
     if (action === "edit") {
       onEdit(movie);
     } else if (action === "delete") {
@@ -35,7 +36,6 @@ const MovieTile = ({ movie, onClick, onEdit, onDelete }) => {
           </div>
         )}{" "}
       </div>{" "}
-      {/* Title, Year, and Genre */}{" "}
       <div className="movie-tile__info">
         <div className="movie-tile__title"> {name} </div>{" "}
         <div className="movie-tile__year"> {releaseYear} </div>{" "}
