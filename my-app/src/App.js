@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Counter from "./components/Counter";
 import SearchForm from "./components/SearchForm";
 import GenreSelect from "./components/GenreSelect";
+import MovieHomePage from "./components/MovieHomePage/MovieHomePage";
 
 function App() {
   const [selectedGenre, setSelectedGenre] = useState("Action");
@@ -18,15 +19,18 @@ function App() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1> Counter Component </h1> <Counter initialValue={0} />{" "}
-      <h1> Search Form Component </h1>{" "}
-      <SearchForm initialQuery="Search here" onSearch={handleSearch} />{" "}
-      <h1> Genre Select Component </h1>{" "}
-      <GenreSelect
-        genres={genres}
-        selectedGenre={selectedGenre}
-        onSelect={handleGenreSelect}
-      />{" "}
+      <div style={{ display: "none" }}>
+        <h1> Counter Component </h1> <Counter initialValue={0} />{" "}
+        <h1> Search Form Component </h1>{" "}
+        <SearchForm initialQuery="Search here" onSearch={handleSearch} />{" "}
+        <h1> Genre Select Component </h1>{" "}
+        <GenreSelect
+          genres={genres}
+          selectedGenre={selectedGenre}
+          onSelect={handleGenreSelect}
+        />{" "}
+      </div>{" "}
+      <h1> Movie Search App </h1> <MovieHomePage />
     </div>
   );
 }
