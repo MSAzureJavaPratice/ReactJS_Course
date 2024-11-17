@@ -1,7 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import movieService from "../../service/movieService";
 import "./MovieDetails.css";
 
-const MovieDetails = ({ movie }) => {
+const MovieDetails = ({ movieId }) => {
+  const [movie, setMovie] = useState(null);
+
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      try {
+        console.log('Fetch Movie Details: ' + movieId);
+        const movieData = await movieService.getMovieById(movieId);
+        setMovie(movieData);
+      } catch (error) {
+        console.error("Error fetching movie details:", error);
+      }
+    };
+
+    if (movieId) {
+      fetchMovieDetails();
+    }
+  }, [movieId]);
+
+  if (!movie) {
+    return <div>Loading...</div>;
+  }
+
   const {
     poster_path: posterPath,
     title,

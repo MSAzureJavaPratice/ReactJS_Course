@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";  // Updated import
 import MovieTile from "../MovieTile/MovieTile";
 import MovieDetails from "../MovieDetails/MovieDetails";
 import SortControl from "../SortControl/SortControl";
@@ -6,22 +7,31 @@ import Dialog from "../Dialog/Dialog";
 import MovieForm from "../MovieForm/MovieForm";
 import SearchForm from "../SearchForm/SearchForm";
 import GenreSelect from "../GenreSelect/GenreSelect";
-import movieService from "../../service/movieService"; // Import the service layer
+import movieService from "../../service/movieService";
 import "./MovieHomePage.css";
 
 const genres = ["All", "Action", "Sci-Fi", "Drama", "Thriller", "Crime"];
 
-const Main = () => {
+const MovieHomePage = () => {
   const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
-  const [sortBy, setSortBy] = useState("release_date");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState(null);
   const [dialogTitle, setDialogTitle] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeGenre, setActiveGenre] = useState("All");
 
-  // Fetch movies from the API
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const defaultParams = {
+    query: "",
+    genre: "All",
+    sortBy: "release_date",
+    movieId: null,
+  };
+
+  const searchQuery = searchParams.get("query") || defaultParams.query;
+  const activeGenre = searchParams.get("genre") || defaultParams.genre;
+  const sortBy = searchParams.get("sortBy") || defaultParams.sortBy;
+  const movieId = searchParams.get("movieId");
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -38,10 +48,36 @@ const Main = () => {
         console.error("Error fetching movies:", error);
       }
     };
+
     fetchMovies();
   }, [searchQuery, activeGenre, sortBy]);
 
-  const handleMovieClick = (movie) => setSelectedMovie(movie);
+  const updateSearchParams = (updates) => {
+    setSearchParams({ ...Object.fromEntries(searchParams.entries()), ...updates });
+  };
+
+  const handleSearch = (query) => {
+    updateSearchParams({ query });
+  };
+
+  const handleGenreChange = (genre) => {
+    updateSearchParams({ genre });
+  };
+
+  const handleSortChange = (newSort) => {
+    updateSearchParams({ sortBy: newSort });
+  };
+
+  const handleMovieClick = (movie) => {
+    updateSearchParams({ movieId: movie.id }); // Updates the movieId in the URL
+  };
+
+  const handleShareMovie = (movie) => {
+    const url = `${window.location.origin}?movieId=${movie.id}`;
+    navigator.clipboard.writeText(url).then(() => {
+      alert(`Movie link copied to clipboard: ${url}`);
+    });
+  };
 
   const handleEditMovie = (movie) => {
     setDialogTitle("Edit Movie");
@@ -90,40 +126,42 @@ const Main = () => {
     setIsDialogOpen(true);
   };
 
-  const handleSortChange = (newSort) => setSortBy(newSort);
-
   return (
     <div className="main-container">
       <div className="filters-container">
-        <SearchForm onSearch={(query) => setSearchQuery(query)} />
-        {selectedMovie && (
+        <SearchForm initialQuery={searchQuery} onSearch={handleSearch} />
+        {movieId && (
+        <div className="movie-details-container">
           <MovieDetails
-            movie={selectedMovie}
-            onBack={() => setSelectedMovie(null)}
+            movieId={movieId}
           />
-        )}
+        </div>
+      )}
         <div className="control-bar">
           <div className="genre-select-container">
             <GenreSelect
               genres={genres}
               activeGenre={activeGenre}
-              onGenreChange={(genre) => setActiveGenre(genre)}
+              onGenreChange={handleGenreChange}
             />
             <SortControl currentSort={sortBy} onSortChange={handleSortChange} />
           </div>
         </div>
       </div>
+
       <div className="movie-list">
         {movies.map((movie) => (
           <MovieTile
             key={movie.id}
             movie={movie}
-            onClick={handleMovieClick}
-            onEdit={handleEditMovie}
-            onDelete={handleDeleteMovie}
+            onClick={() => handleMovieClick(movie)}  // Updates the movieId in URL
+            onEdit={() => handleEditMovie(movie)}
+            onDelete={() => handleDeleteMovie(movie)}
+            onShare={() => handleShareMovie(movie)}
           />
         ))}
       </div>
+
       {isDialogOpen && (
         <Dialog
           title={dialogTitle}
@@ -137,4 +175,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default MovieHomePage;
