@@ -2,37 +2,32 @@ import React, { useState, useEffect } from "react";
 import "./MovieForm.css";
 
 const availableGenres = [
-  "Action",
-  "Crime",
-  "Drama",
-  "Sci-Fi",
-  "Thriller",
-  "Fantasy",
-  "Adventure",
-  "Romance",
+  "Action", "Crime", "Drama", "Sci-Fi", "Thriller", "Fantasy", 
+  "Adventure", "Romance",
 ];
 
 const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
-  console.log("Inside MovieForm: " + JSON.stringify(initialMovieInfo));
 
-  // Initialize the local state for form fields
+  // Initialize the local state for form fields, including the id
   const [selectedGenres, setSelectedGenres] = useState(initialMovieInfo.genres || []);
-  const [title, setTitle] = useState(initialMovieInfo.name || "");
-  const [releaseYear, setReleaseYear] = useState(initialMovieInfo.releaseYear || "");
-  const [description, setDescription] = useState(initialMovieInfo.description || "");
-  const [duration, setDuration] = useState(initialMovieInfo.duration || "");
-  const [rating, setRating] = useState(initialMovieInfo.rating || "");
-  const [imageUrl, setImageUrl] = useState(initialMovieInfo.imageUrl || "");
+  const [title, setTitle] = useState(initialMovieInfo.title || "");
+  const [releaseDate, setReleaseDate] = useState(initialMovieInfo.release_date || "");
+  const [overview, setOverview] = useState(initialMovieInfo.overview || "");
+  const [runtime, setRuntime] = useState(initialMovieInfo.runtime || "");
+  const [rating, setRating] = useState(initialMovieInfo.vote_average || "");
+  const [posterPath, setPosterPath] = useState(initialMovieInfo.poster_path || "");
+  const [movieId, setMovieId] = useState(initialMovieInfo.id || "");
 
   useEffect(() => {
-    // Update the genres if initialMovieInfo changes
+    // Update the state if initialMovieInfo changes
     setSelectedGenres(initialMovieInfo.genres || []);
-    setTitle(initialMovieInfo.name || "");
-    setReleaseYear(initialMovieInfo.releaseYear || "");
-    setDescription(initialMovieInfo.description || "");
-    setDuration(initialMovieInfo.duration || "");
-    setRating(initialMovieInfo.rating || "");
-    setImageUrl(initialMovieInfo.imageUrl || "");
+    setTitle(initialMovieInfo.title || "");
+    setReleaseDate(initialMovieInfo.release_date || "");
+    setOverview(initialMovieInfo.overview || "");
+    setRuntime(initialMovieInfo.runtime || "");
+    setRating(initialMovieInfo.vote_average || "");
+    setPosterPath(initialMovieInfo.poster_path || "");
+    setMovieId(initialMovieInfo.id || ""); // Ensure the ID is part of the state
   }, [initialMovieInfo]);
 
   const handleGenreChange = (e) => {
@@ -45,13 +40,14 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
 
     // Collect all form data
     const updatedMovie = {
-      name: title,
-      releaseYear,
+      id: movieId, // Ensure the movie ID is included
+      title,
+      release_date: releaseDate,
       genres: selectedGenres,
-      description,
-      duration,
-      rating,
-      imageUrl,
+      overview,
+      runtime: parseInt(runtime, 10), // Ensure runtime is an integer
+      vote_average: parseFloat(rating), // Ensure vote_average is a float
+      poster_path: posterPath,
     };
 
     // Pass the form data to the parent component
@@ -72,11 +68,12 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
       </div>
       <div>
         <label>
-          Release Year:
+          Release Date:
           <input
-            name="releaseYear"
-            value={releaseYear} // Controlled input for releaseYear
-            onChange={(e) => setReleaseYear(e.target.value)} // Update releaseYear in state
+            name="releaseDate"
+            type="date"
+            value={releaseDate} // Controlled input for release date
+            onChange={(e) => setReleaseDate(e.target.value)} // Update release date in state
           />
         </label>
       </div>
@@ -99,11 +96,12 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
       </div>
       <div>
         <label>
-          Duration:
+          Runtime (minutes):
           <input
-            name="duration"
-            value={duration} // Controlled input for duration
-            onChange={(e) => setDuration(e.target.value)} // Update duration in state
+            name="runtime"
+            type="number"
+            value={runtime} // Controlled input for runtime
+            onChange={(e) => setRuntime(e.target.value)} // Update runtime in state
           />
         </label>
       </div>
@@ -112,6 +110,8 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
           Rating:
           <input
             name="rating"
+            type="number"
+            step="0.1"
             value={rating} // Controlled input for rating
             onChange={(e) => setRating(e.target.value)} // Update rating in state
           />
@@ -119,22 +119,22 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
       </div>
       <div>
         <label>
-          Image URL:
+          Poster URL:
           <input
-            name="imageUrl"
-            value={imageUrl} // Controlled input for imageUrl
-            onChange={(e) => setImageUrl(e.target.value)} // Update imageUrl in state
+            name="posterPath"
+            value={posterPath} // Controlled input for poster URL
+            onChange={(e) => setPosterPath(e.target.value)} // Update poster URL in state
           />
         </label>
       </div>
       <div>
         <label>
-          Description:
+          Overview:
           <textarea
-            name="description"
+            name="overview"
             rows="5"
-            value={description} // Controlled input for description
-            onChange={(e) => setDescription(e.target.value)} // Update description in state
+            value={overview} // Controlled input for overview
+            onChange={(e) => setOverview(e.target.value)} // Update overview in state
           />
         </label>
       </div>

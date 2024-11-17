@@ -3,7 +3,6 @@ import FocusLock from "react-focus-lock";
 import "./Dialog.css";
 
 const Dialog = ({ isOpen, onClose, title, children }) => {
-  console.log('Inside Dialog: ' + isOpen);
   if (!isOpen) return null;
 
   return (
