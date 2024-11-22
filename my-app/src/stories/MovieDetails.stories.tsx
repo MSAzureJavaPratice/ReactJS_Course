@@ -1,30 +1,15 @@
 import React from "react";
-import { Meta, Story } from "@storybook/react"; // Correct Story import
-import MovieDetails from "../components/MovieDetails/MovieDetails"; // Import your component
+import { Meta, StoryFn as Story } from "@storybook/react";
+import MovieDetails from "../components/MovieDetails/MovieDetails";
+import { Movie } from "../components/MovieDetails/MovieDetails"; 
 
-// Define the Movie type to be used in the story
-interface Movie {
-  imageUrl: string;
-  name: string;
-  releaseYear: string;
-  genres: string[];
-  rating: string;
-  duration: string;
-  description: string;
-}
-
-// Storybook metadata for MovieDetails component
 export default {
-  title: "Components/MovieDetails", // Title for the story
+  title: "Components/MovieDetails",
   component: MovieDetails,
 } as Meta;
 
-// Template to render the MovieDetails component
-const Template: Story<{
-  movie: Movie;
-}> = (args) => <MovieDetails {...args} />;
+const Template: Story<{ movie: Movie }> = (args) => <MovieDetails {...args} />;
 
-// Default story for MovieDetails
 export const Default = Template.bind({});
 Default.args = {
   movie: {
