@@ -9,10 +9,12 @@
         "@testing-library/user-event": "^13.5.0",
         "ajv": "^6.0.0",
         "ajv-keywords": "^3.5.2",
+        "focus-trap-react": "^10.3.1",
         "prop-types": "^15.8.1",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-focus-lock": "^2.13.2",
+        "react-portal": "^4.2.2",
         "react-scripts": "^5.0.1",
         "web-vitals": "^2.1.4",
         "webpack-manifest-plugin": "^5.0.0"

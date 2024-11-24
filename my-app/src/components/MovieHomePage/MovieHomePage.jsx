@@ -65,6 +65,7 @@ const Main = () => {
               m.id === movie.id ? { ...m, ...updatedMovie } : m
             )
           );
+          setSelectedMovie(updatedMovie);
           setIsDialogOpen(false); // Close the dialog after submitting
         }}
       />
@@ -85,6 +86,7 @@ const Main = () => {
                 prevMovies.filter((m) => m.id !== movie.id)
               );
               setIsDialogOpen(false);
+              setSelectedMovie(sortedMovies[0]);
             }}
           >
             Delete{" "}
