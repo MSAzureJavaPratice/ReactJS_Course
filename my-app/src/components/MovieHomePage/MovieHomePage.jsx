@@ -99,6 +99,21 @@ const Main = () => {
     console.log("Inside Main Home setIsDialogOpen: " + isDialogOpen);
   };
 
+  const handleAddMovie = () => {
+    setDialogTitle("Add New Movie");
+    setDialogContent(
+      <MovieForm
+        initialMovieInfo={{id: Math.max(...movies.map(m => m.id)) + 1, imageUrl: '', name: '', releaseYear: '', genres: [], rating:'', duration: '', description: ''}}
+        onSubmit={(newMovie) => {
+          setMovies((prevMovies) => [...prevMovies, newMovie]);
+          setSelectedMovie(newMovie);
+          setIsDialogOpen(false); // Close the dialog after submitting
+        }}
+      />
+    );
+    setIsDialogOpen(true);
+  };
+
   const handleSortChange = (newSort) => setSortBy(newSort);
 
   const sortedMovies = [...movies].sort((a, b) => {
@@ -108,13 +123,12 @@ const Main = () => {
 
   return (
     <div className="main-container">
-      {" "}
-      {selectedMovie && <MovieDetails movie={selectedMovie} />}{" "}
-      <div className="sort-control-container">
-        <SortControl currentSort={sortBy} onSortChange={handleSortChange} />{" "}
-      </div>{" "}
+      {selectedMovie ? <MovieDetails movie={selectedMovie} /> : <p>Please select a movie.</p>}
+      <div className="search-bar-container">
+        <SortControl currentSort={sortBy} onSortChange={handleSortChange} />
+        <button className="add-movie-btn" onClick={handleAddMovie}> Add New Movie </button>
+      </div>
       <div className="movie-list">
-        {" "}
         {sortedMovies.map((movie) => (
           <MovieTile
             key={movie.id}
@@ -123,18 +137,17 @@ const Main = () => {
             onEdit={handleEditMovie}
             onDelete={handleDeleteMovie}
           />
-        ))}{" "}
-      </div>{" "}
+        ))}
+      </div>
       {isDialogOpen && (
         <Dialog
           title={dialogTitle}
           isOpen={isDialogOpen}
           onClose={() => setIsDialogOpen(false)}
         >
-          {" "}
-          {dialogContent}{" "}
+          {dialogContent}
         </Dialog>
-      )}{" "}
+      )}
     </div>
   );
 };
