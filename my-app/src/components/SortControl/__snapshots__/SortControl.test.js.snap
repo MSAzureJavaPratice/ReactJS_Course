@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SortControl Component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="sort-control"
+  >
+    <label
+      for="sort-by"
+    >
+       Sort by: 
+    </label>
+     
+    <select
+      id="sort-by"
+    >
+      <option
+        value="releaseDate"
+      >
+         Release Date 
+      </option>
+       
+      <option
+        value="title"
+      >
+         Title 
+      </option>
+       
+    </select>
+     
+  </div>
+</DocumentFragment>
+`;

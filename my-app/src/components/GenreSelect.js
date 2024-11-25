@@ -1,4 +1,5 @@
 import React from "react";
+import "./GenreSelect.css"; // Import the CSS file for styling
 
 class GenreSelect extends React.Component {
   constructor(props) {
@@ -26,16 +27,12 @@ class GenreSelect extends React.Component {
           <button
             key={genre}
             onClick={() => this.handleGenreSelect(genre)}
-            style={{
-              marginRight: "10px",
-              backgroundColor: genre === selectedGenre ? "blue" : "lightgray",
-              color: genre === selectedGenre ? "white" : "black",
-            }}
+            className={genre === selectedGenre ? "selected" : ""}
           >
             {genre}{" "}
           </button>
         ))}{" "}
-        <p> Selected Genre: {this.state.displayedGenre} </p>{" "}
+        <p id="selected-genre"> Selected Genre: {this.state.displayedGenre} </p>{" "}
       </div>
     );
   }

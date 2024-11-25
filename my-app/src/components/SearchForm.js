@@ -41,7 +41,7 @@ class SearchForm extends React.Component {
           style={{ marginRight: "10px" }}
         />{" "}
         <button onClick={this.handleSearch}> Search </button>{" "}
-        <p> Search Query: {this.state.displayedQuery} </p>{" "}
+        <p id="search-result"> Search Query: {this.state.displayedQuery} </p>{" "}
       </div>
     );
   }
