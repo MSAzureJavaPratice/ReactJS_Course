@@ -181,7 +181,7 @@ h1 {
     color: #333;
 }
 
-.search-bar-container {
+.controls-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -189,7 +189,7 @@ h1 {
     width: 100%;
 }
 
-.search-bar-container .add-movie-btn {
+.controls-container .add-movie-btn {
     padding: 10px 15px;
     background-color: #4CAF50;
     color: white;

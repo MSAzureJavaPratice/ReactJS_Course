@@ -3,14 +3,17 @@ import MovieTile from "../MovieTile/MovieTile";
 import MovieDetails from "../MovieDetails/MovieDetails";
 import SortControl from "../SortControl/SortControl";
 import Dialog from "../Dialog/Dialog";
-import MovieForm from "../MovieForm/MovieForm";
+import AddMovie from "../AddMovie/AddMovie";
+import EditMovie from "../EditMovie/EditMovie";
+import DeleteMovie from "../DeleteMovie/DeleteMovie";
 import "./MovieHomePage.css";
 
 // Static Data for Movies
 const movieData = [
   {
     id: 1,
-    imageUrl: "https://m.media-amazon.com/images/M/MV5BMjExMjkwNTQ0Nl5BMl5BanBnXkFtZTcwNTY0OTk1Mw@@._V1_.jpg",
+    imageUrl:
+      "https://m.media-amazon.com/images/M/MV5BMjExMjkwNTQ0Nl5BMl5BanBnXkFtZTcwNTY0OTk1Mw@@._V1_.jpg",
     name: "Inception",
     releaseYear: "2010",
     genres: ["Sci-Fi", "Thriller"],
@@ -21,7 +24,8 @@ const movieData = [
   },
   {
     id: 2,
-    imageUrl: "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p10543523_p_v8_as.jpg",
+    imageUrl:
+      "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p10543523_p_v8_as.jpg",
     name: "Interstellar",
     releaseYear: "2014",
     genres: ["Sci-Fi", "Drama"],
@@ -32,7 +36,8 @@ const movieData = [
   },
   {
     id: 3,
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4G5ph9HytFv084gnFFp1_mxWkzNKnPxuiKJqQvBtOR4iq-KsN4cCJiAe_Y6xSwlxqO6A&usqp=CAU",
+    imageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4G5ph9HytFv084gnFFp1_mxWkzNKnPxuiKJqQvBtOR4iq-KsN4cCJiAe_Y6xSwlxqO6A&usqp=CAU",
     name: "The Dark Knight",
     releaseYear: "2008",
     genres: ["Action", "Crime", "Drama"],
@@ -45,97 +50,74 @@ const movieData = [
 
 const Main = () => {
   const [movies, setMovies] = useState(movieData);
-  const [selectedMovie, setSelectedMovie] = useState(movieData[0]);
-  const [sortBy, setSortBy] = useState("releaseDate");
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [sortBy, setSortBy] = useState("releaseYear");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState(null);
   const [dialogTitle, setDialogTitle] = useState("");
 
   const handleMovieClick = (movie) => setSelectedMovie(movie);
 
-  const handleEditMovie = (movie) => {
-    setDialogTitle("Edit Movie");
-    setDialogContent(
-      <MovieForm
-        initialMovieInfo={movie}
-        onSubmit={(updatedMovie) => {
-          // Process the updated movie information (including genres)
-          setMovies((prevMovies) =>
-            prevMovies.map((m) =>
-              m.id === movie.id ? { ...m, ...updatedMovie } : m
-            )
-          );
-          setSelectedMovie(updatedMovie);
-          setIsDialogOpen(false); // Close the dialog after submitting
-        }}
-      />
-    );
-    setIsDialogOpen(true);
+  // Handling sorting change
+  const handleSortChange = (newSort) => {
+    console.log('handleSort' + newSort);
+    setSortBy(newSort);
   };
 
-  const handleDeleteMovie = (movie) => {
-    console.log("Inside Main Home Delete Page: " + movie);
-    setDialogTitle("Delete Movie");
-    setDialogContent(
-      <div>
-        <p> Are you sure you want to delete "{movie.name}" ? </p>{" "}
-        <div className="dialog-actions">
-          <button
-            onClick={() => {
-              setMovies((prevMovies) =>
-                prevMovies.filter((m) => m.id !== movie.id)
-              );
-              setIsDialogOpen(false);
-              setSelectedMovie(sortedMovies[0]);
-            }}
-          >
-            Delete{" "}
-          </button>{" "}
-          <button onClick={() => setIsDialogOpen(false)}> Cancel </button>{" "}
-        </div>{" "}
-      </div>
-    );
-    setIsDialogOpen(true);
-    console.log("Inside Main Home setIsDialogOpen: " + isDialogOpen);
-  };
-
-  const handleAddMovie = () => {
-    setDialogTitle("Add New Movie");
-    setDialogContent(
-      <MovieForm
-        initialMovieInfo={{id: Math.max(...movies.map(m => m.id)) + 1, imageUrl: '', name: '', releaseYear: '', genres: [], rating:'', duration: '', description: ''}}
-        onSubmit={(newMovie) => {
-          setMovies((prevMovies) => [...prevMovies, newMovie]);
-          setSelectedMovie(newMovie);
-          setIsDialogOpen(false); // Close the dialog after submitting
-        }}
-      />
-    );
-    setIsDialogOpen(true);
-  };
-
-  const handleSortChange = (newSort) => setSortBy(newSort);
-
+  // Sorted movies based on sorting options
   const sortedMovies = [...movies].sort((a, b) => {
-    if (sortBy === "releaseDate") return b.releaseYear - a.releaseYear;
+    if (sortBy === "releaseDate") return parseInt(b.releaseYear) - parseInt(a.releaseYear);
     return a.name.localeCompare(b.name);
   });
 
   return (
     <div className="main-container">
-      {selectedMovie ? <MovieDetails movie={selectedMovie} /> : <p>Please select a movie.</p>}
-      <div className="search-bar-container">
+      {selectedMovie ? (
+        <MovieDetails movie={selectedMovie} />
+      ) : (
+        <MovieDetails movie={sortedMovies[0]} />
+      )}
+      <div className="controls-container">
         <SortControl currentSort={sortBy} onSortChange={handleSortChange} />
-        <button className="add-movie-btn" onClick={handleAddMovie}> Add New Movie </button>
+        <AddMovie
+          movies={movies}
+          setMovies={setMovies}
+          setIsDialogOpen={setIsDialogOpen}
+          setDialogTitle={setDialogTitle}
+          setDialogContent={setDialogContent}
+        />
       </div>
       <div className="movie-list">
         {sortedMovies.map((movie) => (
-          <MovieTile
-            key={movie.id}
-            movie={movie}
-            onClick={handleMovieClick}
-            onEdit={handleEditMovie}
-            onDelete={handleDeleteMovie}
+           <MovieTile
+           key={movie.id}
+           movie={movie}
+           onClick={() => handleMovieClick(movie)}
+           onEdit={() => {
+             setDialogTitle("Edit Movie");
+             setDialogContent(
+              <EditMovie
+              movie={movie}
+              setMovies={setMovies}
+              selectedMovie={selectedMovie}
+              setSelectedMovie={setSelectedMovie}
+              onClose={() => setIsDialogOpen(false)}
+            />            
+              );
+              setIsDialogOpen(true);
+            }}
+            onDelete={() => {
+              setDialogTitle("Delete Movie");
+              setDialogContent(
+                <DeleteMovie
+                  movie={movie}
+                  setMovies={setMovies}
+                  onClose={() => setIsDialogOpen(false)}
+                  setSelectedMovie={setSelectedMovie}
+                />
+              );
+              setIsDialogOpen(true);
+            }}
           />
         ))}
       </div>

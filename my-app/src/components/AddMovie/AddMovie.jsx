@@ -1,5 +1,6 @@
 import React from 'react';
 import MovieForm from "../MovieForm/MovieForm";
+import "./AddMovie.css";
 
 const AddMovie = ({ movies, setMovies, setIsDialogOpen, setDialogTitle, setDialogContent }) => {
   const handleAddMovie = () => {
