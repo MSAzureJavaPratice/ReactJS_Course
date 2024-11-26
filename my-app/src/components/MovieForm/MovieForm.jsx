@@ -13,7 +13,6 @@ const availableGenres = [
 ];
 
 const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
-
   // Initialize the local state for form fields
   const [id, setId] = useState(initialMovieInfo.id || null); // Preserve the id
   const [selectedGenres, setSelectedGenres] = useState(
@@ -76,8 +75,8 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
           Title:
           <input
             name="title"
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
         </label>
       </div>
@@ -133,7 +132,7 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
           Image URL:
           <input
             name="imageUrl"
-            value={imageUrl} 
+            value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
           />
         </label>

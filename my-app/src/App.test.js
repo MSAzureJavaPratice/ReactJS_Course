@@ -20,13 +20,6 @@ describe("App Component", () => {
         expect(genreSelectTitle).toBeInTheDocument();
     });
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
-
-
     test("increments and decrements the counter", () => {
         render( < App / > );
         const incrementButton = screen.getByText(/Increment/i);
