@@ -2,58 +2,70 @@ import React, { useState, useEffect } from "react";
 import "./MovieForm.css";
 
 const availableGenres = [
-  "Action", "Crime", "Drama", "Sci-Fi", "Thriller",
-  "Fantasy", "Adventure", "Romance",
+  "Action",
+  "Crime",
+  "Drama",
+  "Sci-Fi",
+  "Thriller",
+  "Fantasy",
+  "Adventure",
+  "Romance",
 ];
 
 const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
-  const [movieInfo, setMovieInfo] = useState(() => ({
-    id: initialMovieInfo.id || null,
-    selectedGenres: initialMovieInfo.genres || [],
-    title: initialMovieInfo.title || "",
-    releaseYear: initialMovieInfo.releaseYear || "",
-    description: initialMovieInfo.description || "",
-    duration: initialMovieInfo.duration || "",
-    rating: initialMovieInfo.rating || "",
-    imageUrl: initialMovieInfo.imageUrl || "",
-  }));
+  // Initialize the local state for form fields
+  const [id, setId] = useState(initialMovieInfo.id || null); // Preserve the id
+  const [selectedGenres, setSelectedGenres] = useState(
+    initialMovieInfo.genres || []
+  );
+  const [title, setTitle] = useState(initialMovieInfo.name || "");
+  const [releaseYear, setReleaseYear] = useState(
+    initialMovieInfo.releaseYear || ""
+  );
+  const [description, setDescription] = useState(
+    initialMovieInfo.description || ""
+  );
+  const [duration, setDuration] = useState(initialMovieInfo.duration || "");
+  const [rating, setRating] = useState(initialMovieInfo.rating || "");
+  const [imageUrl, setImageUrl] = useState(initialMovieInfo.imageUrl || "");
 
-  // Synchronize movieInfo only when initialMovieInfo changes (using stable reference)
   useEffect(() => {
-    setMovieInfo({
-      id: initialMovieInfo.id || null,
-      selectedGenres: initialMovieInfo.genres || [],
-      title: initialMovieInfo.title || "",
-      releaseYear: initialMovieInfo.releaseYear || "",
-      description: initialMovieInfo.description || "",
-      duration: initialMovieInfo.duration || "",
-      rating: initialMovieInfo.rating || "",
-      imageUrl: initialMovieInfo.imageUrl || "",
-    });
-  }, [
-    initialMovieInfo.id,
-    initialMovieInfo.genres,
-    initialMovieInfo.title,
-    initialMovieInfo.releaseYear,
-    initialMovieInfo.description,
-    initialMovieInfo.duration,
-    initialMovieInfo.rating,
-    initialMovieInfo.imageUrl,
-  ]);
+    // Update all fields if initialMovieInfo changes
+    setId(initialMovieInfo.id || null);
+    setSelectedGenres(initialMovieInfo.genres || []);
+    setTitle(initialMovieInfo.name || "");
+    setReleaseYear(initialMovieInfo.releaseYear || "");
+    setDescription(initialMovieInfo.description || "");
+    setDuration(initialMovieInfo.duration || "");
+    setRating(initialMovieInfo.rating || "");
+    setImageUrl(initialMovieInfo.imageUrl || "");
+  }, [initialMovieInfo]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "genres") {
-      const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
-      setMovieInfo((prev) => ({ ...prev, selectedGenres: selectedOptions }));
-    } else {
-      setMovieInfo((prev) => ({ ...prev, [name]: value }));
-    }
+  const handleGenreChange = (e) => {
+    const selectedValues = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    );
+    setSelectedGenres(selectedValues); // Update the selected genres in the state
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSubmit(movieInfo);
+
+    // Collect all form data, including the id
+    const updatedMovie = {
+      id, // Include the id
+      name: title,
+      releaseYear,
+      genres: selectedGenres,
+      description,
+      duration,
+      rating,
+      imageUrl,
+    };
+
+    // Pass the form data to the parent component
+    onSubmit(updatedMovie);
   };
 
   return (
@@ -61,23 +73,31 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
       <div>
         <label>
           Title:
-          <input name="title" value={movieInfo.title} onChange={handleChange} />
+          <input
+            name="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
         </label>
       </div>
       <div>
         <label>
           Release Year:
-          <input name="releaseYear" value={movieInfo.releaseYear} onChange={handleChange} />
+          <input
+            name="releaseYear"
+            value={releaseYear}
+            onChange={(e) => setReleaseYear(e.target.value)}
+          />
         </label>
       </div>
       <div>
         <label>
           Genre:
           <select
-            name="genres"
+            name="genre"
             multiple
-            value={movieInfo.selectedGenres}
-            onChange={handleChange}
+            value={selectedGenres}
+            onChange={handleGenreChange}
           >
             {availableGenres.map((genre) => (
               <option key={genre} value={genre}>
@@ -90,19 +110,31 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
       <div>
         <label>
           Duration:
-          <input name="duration" value={movieInfo.duration} onChange={handleChange} />
+          <input
+            name="duration"
+            value={duration}
+            onChange={(e) => setDuration(e.target.value)}
+          />
         </label>
       </div>
       <div>
         <label>
           Rating:
-          <input name="rating" value={movieInfo.rating} onChange={handleChange} />
+          <input
+            name="rating"
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
+          />
         </label>
       </div>
       <div>
         <label>
           Image URL:
-          <input name="imageUrl" value={movieInfo.imageUrl} onChange={handleChange} />
+          <input
+            name="imageUrl"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+          />
         </label>
       </div>
       <div>
@@ -111,8 +143,8 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
           <textarea
             name="description"
             rows="5"
-            value={movieInfo.description}
-            onChange={handleChange}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </label>
       </div>
