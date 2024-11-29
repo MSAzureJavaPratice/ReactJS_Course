@@ -9,7 +9,7 @@ describe("MovieForm Component", () => {
     render(<MovieForm onSubmit={onSubmit} />);
     expect(screen.getByLabelText("Title:")).toHaveValue("");
     expect(screen.getByLabelText("Release Year:")).toHaveValue("");
-    expect(screen.getByLabelText("Genre:")).toHaveValue("");
+    expect(screen.getByLabelText("Genre:")).toHaveValue([]); // Expect empty array for multiple selection.
     expect(screen.getByLabelText("Description:")).toHaveValue("");
   });
 
@@ -17,43 +17,38 @@ describe("MovieForm Component", () => {
     const initialMovieInfo = {
       title: "Inception",
       releaseYear: "2010",
-      genre: "Sci-Fi",
+      genres: ["Sci-Fi"],
       description: "A movie about dreams.",
     };
 
-    render(
-      <MovieForm initialMovieInfo={initialMovieInfo} onSubmit={onSubmit} />
-    );
+    render(<MovieForm initialMovieInfo={initialMovieInfo} onSubmit={onSubmit} />);
     expect(screen.getByLabelText("Title:")).toHaveValue("Inception");
     expect(screen.getByLabelText("Release Year:")).toHaveValue("2010");
-    expect(screen.getByLabelText("Genre:")).toHaveValue("Sci-Fi");
-    expect(screen.getByLabelText("Description:")).toHaveValue(
-      "A movie about dreams."
-    );
+    expect(screen.getByLabelText("Genre:")).toHaveValue(["Sci-Fi"]); // Expect array for multiple selection.
+    expect(screen.getByLabelText("Description:")).toHaveValue("A movie about dreams.");
   });
 
   test("calls onSubmit with form data when submitted", () => {
-    render(<MovieForm onSubmit={onSubmit} />);
-
-    fireEvent.change(screen.getByLabelText("Title:"), {
-      target: { value: "Matrix" },
-    });
-    fireEvent.change(screen.getByLabelText("Release Year:"), {
-      target: { value: "1999" },
-    });
-    fireEvent.change(screen.getByLabelText("Genre:"), {
-      target: { value: "Action" },
-    });
-    fireEvent.change(screen.getByLabelText("Description:"), {
-      target: { value: "A movie about virtual reality." },
-    });
-
-    fireEvent.submit(screen.getByRole("button", { name: /submit/i }));
-    expect(onSubmit).toHaveBeenCalledWith({
+    const initialMovieInfo = {
       title: "Matrix",
       releaseYear: "1999",
-      genre: "Action",
+      genres: ["Action"],
       description: "A movie about virtual reality.",
+    };
+    render(<MovieForm initialMovieInfo={initialMovieInfo} onSubmit={onSubmit} />);
+
+    // Trigger form submission
+    fireEvent.submit(screen.getByRole("button", { name: /submit/i }));
+
+    expect(onSubmit).toHaveBeenCalledWith({
+      id: null,
+      title: "Matrix",
+      releaseYear: "1999",
+      selectedGenres: ["Action"], // Match the correct state property.
+      description: "A movie about virtual reality.",
+      duration: "",
+      rating: "",
+      imageUrl: "",
     });
   });
 
