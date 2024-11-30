@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MovieTile Component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="movie-tile"
+  >
+    <img
+      alt="Inception"
+      class="movie-tile__image"
+      src="https://via.placeholder.com/150"
+    />
+    <div
+      class="movie-tile__menu"
+    >
+      <button
+        class="menu-button"
+      >
+         ... 
+      </button>
+        
+    </div>
+     
+    <div
+      class="movie-tile__info"
+    >
+      <div
+        class="movie-tile__title"
+      >
+         Inception 
+      </div>
+       
+      <div
+        class="movie-tile__year"
+      >
+         2010 
+      </div>
+       
+      <div
+        class="movie-tile__genres"
+      >
+         Sci-Fi, Thriller 
+      </div>
+       
+    </div>
+     
+  </div>
+</DocumentFragment>
+`;
