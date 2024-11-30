@@ -30,7 +30,7 @@ function App() {
           onSelect={handleGenreSelect}
         />{" "}
       </div>{" "}
-      <h1> Movie Search App </h1> <MovieHomePage />
+       <MovieHomePage />
     </div>
   );
 }

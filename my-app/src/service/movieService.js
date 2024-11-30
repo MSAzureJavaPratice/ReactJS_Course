@@ -25,7 +25,11 @@ const movieService = {
      */
     createMovie: async(movieData) => {
         try {
-            const response = await axios.post(BASE_URL, movieData);
+            const movieWithoutId = {...movieData };
+            delete movieWithoutId.id; // explicitly delete id if it's part of the object
+
+            // Send the movie data without the id field
+            const response = await axios.post(BASE_URL, movieWithoutId);
             return response.data;
         } catch (error) {
             console.error("Error creating movie:", error);

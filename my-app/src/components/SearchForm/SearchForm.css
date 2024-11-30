@@ -1,7 +1,7 @@
 /* SearchForm.css */
 
 .search-form-container {
-    display: flex;
+    display: inline-block;
     justify-content: center;
     align-items: center;
     padding: 1rem;
@@ -11,13 +11,15 @@
 }
 
 .search-input {
-    width: 60%;
+    width: 65%;
     padding: 0.5rem 1rem;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 1rem;
     outline: none;
     transition: all 0.3s ease;
+    margin-top: 3rem;
+    margin-left: 12rem;
 }
 
 .search-input:focus {
@@ -28,7 +30,7 @@
 .search-button {
     margin-left: 0.5rem;
     padding: 0.5rem 1rem;
-    background-color: #007bff;
+    background-color: red;
     color: #fff;
     border: none;
     border-radius: 4px;

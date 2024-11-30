@@ -2,20 +2,31 @@ import React, { useState, useEffect } from "react";
 import "./MovieForm.css";
 
 const availableGenres = [
-  "Action", "Crime", "Drama", "Sci-Fi", "Thriller", "Fantasy", 
-  "Adventure", "Romance",
+  "Action",
+  "Crime",
+  "Drama",
+  "Sci-Fi",
+  "Thriller",
+  "Fantasy",
+  "Adventure",
+  "Romance",
 ];
 
 const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
-
   // Initialize the local state for form fields, including the id
-  const [selectedGenres, setSelectedGenres] = useState(initialMovieInfo.genres || []);
+  const [selectedGenres, setSelectedGenres] = useState(
+    initialMovieInfo.genres || []
+  );
   const [title, setTitle] = useState(initialMovieInfo.title || "");
-  const [releaseDate, setReleaseDate] = useState(initialMovieInfo.release_date || "");
+  const [releaseDate, setReleaseDate] = useState(
+    initialMovieInfo.release_date || ""
+  );
   const [overview, setOverview] = useState(initialMovieInfo.overview || "");
   const [runtime, setRuntime] = useState(initialMovieInfo.runtime || "");
   const [rating, setRating] = useState(initialMovieInfo.vote_average || "");
-  const [posterPath, setPosterPath] = useState(initialMovieInfo.poster_path || "");
+  const [posterPath, setPosterPath] = useState(
+    initialMovieInfo.poster_path || ""
+  );
   const [movieId, setMovieId] = useState(initialMovieInfo.id || "");
 
   useEffect(() => {
@@ -28,10 +39,22 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
     setRating(initialMovieInfo.vote_average || "");
     setPosterPath(initialMovieInfo.poster_path || "");
     setMovieId(initialMovieInfo.id || ""); // Ensure the ID is part of the state
-  }, [initialMovieInfo]);
+  }, [
+    initialMovieInfo.id,
+    initialMovieInfo.genres,
+    initialMovieInfo.title,
+    initialMovieInfo.release_date,
+    initialMovieInfo.overview,
+    initialMovieInfo.runtime,
+    initialMovieInfo.vote_average,
+    initialMovieInfo.poster_path,
+  ]);
 
   const handleGenreChange = (e) => {
-    const selectedValues = Array.from(e.target.selectedOptions, (option) => option.value);
+    const selectedValues = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    );
     setSelectedGenres(selectedValues); // Update the selected genres in the state
   };
 

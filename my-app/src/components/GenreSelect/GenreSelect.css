@@ -5,10 +5,7 @@
     flex-wrap: wrap;
     gap: 0.5rem;
     padding: 1rem;
-    background-color: #ffffff;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 1rem;
 }
 
 .genre-option {
@@ -17,12 +14,12 @@
     border-radius: 20px;
     font-size: 0.9rem;
     cursor: pointer;
-    background-color: #f8f8f8;
+    background-color: black;
     transition: all 0.3s ease;
 }
 
 .genre-option.active {
-    background-color: #007bff;
+    background-color: red;
     color: #fff;
     border-color: #007bff;
 }

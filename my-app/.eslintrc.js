@@ -17,4 +17,11 @@ module.exports = {
     rules: {
         // Add custom rules here, if needed
     },
+    overrides: [{
+        files: ["*.tsx"],
+        rules: {
+            "no-unused-vars": "off", // Turn off 'no-unused-vars' rule for story files
+            "no-undef": "off"
+        },
+    }, ],
 };

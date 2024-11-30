@@ -11,11 +11,12 @@ const SearchForm = ({ onSearch }) => {
 
   return (
     <div className="search-form-container">
+      <h1>FIND YOUR MOVIE</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           className="search-input"
-          placeholder="Search for a movie..."
+          placeholder="What do you want to watch?"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
