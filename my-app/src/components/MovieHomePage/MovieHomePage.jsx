@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom"; // Updated import
 import MovieTile from "../MovieTile/MovieTile";
 import MovieDetails from "../MovieDetails/MovieDetails";
 import SortControl from "../SortControl/SortControl";
@@ -20,156 +21,203 @@ const Main = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState(null);
   const [dialogTitle, setDialogTitle] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(true);
-  const [activeGenre, setActiveGenre] = useState("All");
   const [alert, setAlert] = useState({ type: "", message: "" });
 
-  useEffect(() => {
-    fetchMovies();
-  }, [searchQuery, activeGenre, sortBy]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const fetchMovies = async () => {
-    try {
-      const params = {
-        search: searchQuery,
-        searchBy: "title",
-        filter: activeGenre !== "All" ? activeGenre : undefined,
-        sortBy,
-        sortOrder: "desc",
-      };
-      const response = await movieService.getMovies(params);
-      setMovies(response.data);
-    } catch (error) {
-      console.error("Error fetching movies:", error);
-    }
-  };
-
-  const handleSortChange = (newSort) => setSortBy(newSort);
-
-  const handleAddMovie = () => {
-    setDialogTitle("Add New Movie");
-    setDialogContent(
-      <AddMovie
-        onClose={() => setIsDialogOpen(false)}
-        onMovieAdded={(newMovie) => setMovies((prev) => [...prev, newMovie])}
-        setAlert={setAlert} 
-      />
-    );
-    setIsDialogOpen(true);
-  };
-
-  const handleEditMovie = (movie) => {
-    setDialogTitle("Edit Movie");
-    setDialogContent(
-      <EditMovie
-        movie={movie}
-        onClose={() => setIsDialogOpen(false)}
-        onMovieUpdated={(updatedMovie) =>
-          setMovies((prev) =>
-            prev.map((m) => (m.id === updatedMovie.id ? updatedMovie : m))
-          )
-        }
-        setAlert={setAlert} 
-      />
-    );
-    setIsDialogOpen(true);
-  };
-
-  const handleDeleteMovie = (movie) => {
-    setDialogTitle("Delete Movie");
-    setDialogContent(
-      <DeleteMovie
-        movie={movie}
-        onClose={() => setIsDialogOpen(false)}
-        onMovieDeleted={() =>
-          setMovies((prev) => prev.filter((m) => m.id !== movie.id))
-        }
-      />
-    );
-    setIsDialogOpen(true);
-  };
-
-  const handleMovieClick = (movie) => {
-    setSelectedMovie(movie);
-    setShowSearch(false);
-  };
-
-  const toggleSearch = () => {
-    setSelectedMovie(null);
-    setShowSearch((prev) => !prev);
-  };
-
-  return (
-    <div className="main-container">
-      <div className="filters-container content-section">
-        {showSearch && (
-          <div className="button-section">
-            <button className="add-movie-btn" onClick={handleAddMovie}>
-              Add Movie
-            </button>
-          </div>
-        )}
-        {showSearch ? (
-          <SearchForm onSearch={(query) => setSearchQuery(query)} />
-        ) : selectedMovie ? (
-          <div className="movie-details-container content-section">
-            <button className="toggle-search-btn" onClick={toggleSearch}>
-              🔍
-            </button>
-            <MovieDetails
-              movie={selectedMovie}
-              onBack={() => {
-                setSelectedMovie(null);
-                setShowSearch(true);
-              }}
-            />
-          </div>
-        ) : null}
-      </div>
-      <div className="control-bar">
-        <div className="genre-select-container">
-          <GenreSelect
-            genres={genres}
-            activeGenre={activeGenre}
-            onGenreChange={(genre) => setActiveGenre(genre)}
-          />
-          <SortControl currentSort={sortBy} onSortChange={handleSortChange} />
-        </div>
-      </div>
-      <div className="movie-list content-section">
-        {movies.map((movie) => (
-          <MovieTile
-            key={movie.id}
-            movie={movie}
-            onClick={() => handleMovieClick(movie)}
-            onEdit={() => handleEditMovie(movie)}
-            onDelete={() => handleDeleteMovie(movie)}
-          />
-        ))}
-      </div>
-      {alert.message && (
-        <Dialog
-          title={alert.type === "success" ? "Success" : "Error"}
-          isOpen={true}
-          onClose={() => setAlert({ type: "", message: "" })}
-        >
-          <div className={`alert ${alert.type}`}>
-            <p>{alert.message}</p>
-          </div>
-        </Dialog>
-      )}
-      {isDialogOpen && (
-        <Dialog
-          title={dialogTitle}
-          isOpen={isDialogOpen}
-          onClose={() => setIsDialogOpen(false)}
-        >
-          {dialogContent}
-        </Dialog>
-      )}
-    </div>
-  );
-};
-
-export default Main;
+   // Retrieve search parameters from URL or set default values
+   const searchQuery = searchParams.get("query") || "";
+   const activeGenre = searchParams.get("genre") || "All";
+   const sortByFromURL = searchParams.get("sortBy") || "release_date";
+   const movieIdFromURL = searchParams.get("movieId"); // Get the movieId from URL
+   
+   // Sync sortBy from URL to the state
+   useEffect(() => {
+     setSortBy(sortByFromURL);
+   }, [sortByFromURL]);
+ 
+   // Fetch movies based on the search params
+   useEffect(() => {
+     const fetchMovies = async () => {
+       try {
+         const params = {
+           search: searchQuery,
+           searchBy: "title",
+           filter: activeGenre !== "All" ? activeGenre : undefined,
+           sortBy,
+           sortOrder: "desc",
+         };
+         const response = await movieService.getMovies(params);
+         setMovies(response.data);
+       } catch (error) {
+         console.error("Error fetching movies:", error);
+       }
+     };
+ 
+     fetchMovies();
+   }, [searchQuery, activeGenre, sortBy]);
+ 
+   // Fetch movie details when the movieId from the URL is available
+   useEffect(() => {
+     if (movieIdFromURL) {
+       const fetchMovieDetails = async () => {
+         try {
+           const movie = await movieService.getMovieById(movieIdFromURL);
+           setSelectedMovie(movie);
+           setShowSearch(false);
+         } catch (error) {
+           console.error("Error fetching movie details:", error);
+         }
+       };
+       fetchMovieDetails();
+     }
+   }, [movieIdFromURL]);
+ 
+   // Update search params in the URL
+   const updateSearchParams = (updates) => {
+     setSearchParams({ ...Object.fromEntries(searchParams.entries()), ...updates });
+   };
+ 
+   const handleSortChange = (newSort) => {
+     setSortBy(newSort);
+     updateSearchParams({ sortBy: newSort });
+   };
+ 
+   const handleSearch = (query) => {
+     updateSearchParams({ query });
+   };
+ 
+   const handleGenreChange = (genre) => {
+     updateSearchParams({ genre });
+   };
+ 
+   const handleMovieClick = (movie) => {
+     updateSearchParams({ movieId: movie.id }); // Update movieId in the URL
+     setSelectedMovie(movie);
+     setShowSearch(false);
+   };
+ 
+   const handleAddMovie = () => {
+     setDialogTitle("Add New Movie");
+     setDialogContent(
+       <AddMovie
+         onClose={() => setIsDialogOpen(false)}
+         onMovieAdded={(newMovie) => setMovies((prev) => [...prev, newMovie])}
+         setAlert={setAlert}
+       />
+     );
+     setIsDialogOpen(true);
+   };
+ 
+   const handleEditMovie = (movie) => {
+     setDialogTitle("Edit Movie");
+     setDialogContent(
+       <EditMovie
+         movie={movie}
+         onClose={() => setIsDialogOpen(false)}
+         onMovieUpdated={(updatedMovie) =>
+           setMovies((prev) =>
+             prev.map((m) => (m.id === updatedMovie.id ? updatedMovie : m))
+           )
+         }
+         setAlert={setAlert}
+       />
+     );
+     setIsDialogOpen(true);
+   };
+ 
+   const handleDeleteMovie = (movie) => {
+     setDialogTitle("Delete Movie");
+     setDialogContent(
+       <DeleteMovie
+         movie={movie}
+         onClose={() => setIsDialogOpen(false)}
+         onMovieDeleted={() =>
+           setMovies((prev) => prev.filter((m) => m.id !== movie.id))
+         }
+       />
+     );
+     setIsDialogOpen(true);
+   };
+ 
+   const toggleSearch = () => {
+     setSelectedMovie(null);
+     setShowSearch((prev) => !prev);
+     updateSearchParams({ movieId: null }); // Reset movieId in URL when closing movie details
+   };
+ 
+   return (
+     <div className="main-container">
+       <div className="filters-container content-section">
+         {showSearch && (
+           <div className="button-section">
+             <button className="add-movie-btn" onClick={handleAddMovie}>
+               Add Movie
+             </button>
+           </div>
+         )}
+         {showSearch ? (
+           <SearchForm onSearch={handleSearch} initialQuery={searchQuery} />
+         ) : selectedMovie ? (
+           <div className="movie-details-container content-section">
+             <button className="toggle-search-btn" onClick={toggleSearch}>
+               🔍
+             </button>
+             <MovieDetails
+               movie={selectedMovie}
+               onBack={() => {
+                 setSelectedMovie(null);
+                 setShowSearch(true);
+                 updateSearchParams({ movieId: null }); // Reset movieId when going back
+               }}
+             />
+           </div>
+         ) : null}
+       </div>
+       <div className="control-bar">
+         <div className="genre-select-container">
+           <GenreSelect
+             genres={genres}
+             activeGenre={activeGenre}
+             onGenreChange={handleGenreChange}
+           />
+           <SortControl currentSort={sortBy} onSortChange={handleSortChange} />
+         </div>
+       </div>
+       <div className="movie-list content-section">
+         {movies.map((movie) => (
+           <MovieTile
+             key={movie.id}
+             movie={movie}
+             onClick={() => handleMovieClick(movie)} // Updates the movieId in the URL
+             onEdit={() => handleEditMovie(movie)}
+             onDelete={() => handleDeleteMovie(movie)}
+           />
+         ))}
+       </div>
+       {alert.message && (
+         <Dialog
+           title={alert.type === "success" ? "Success" : "Error"}
+           isOpen={true}
+           onClose={() => setAlert({ type: "", message: "" })}
+         >
+           <div className={`alert ${alert.type}`}>
+             <p>{alert.message}</p>
+           </div>
+         </Dialog>
+       )}
+       {isDialogOpen && (
+         <Dialog
+           title={dialogTitle}
+           isOpen={isDialogOpen}
+           onClose={() => setIsDialogOpen(false)}
+         >
+           {dialogContent}
+         </Dialog>
+       )}
+     </div>
+   );
+ };
+ 
+ export default Main;

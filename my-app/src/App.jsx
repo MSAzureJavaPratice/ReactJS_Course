@@ -1,37 +1,19 @@
-import React, { useState } from "react";
-import Counter from "./components/Counter";
-import SearchForm from "./components/SearchForm";
-import GenreSelect from "./components/GenreSelect";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MovieHomePage from "./components/MovieHomePage/MovieHomePage";
+import MovieDetails from "./components/MovieDetails/MovieDetails";
 
 function App() {
-  const [selectedGenre, setSelectedGenre] = useState("Action");
-  const genres = ["Action", "Comedy", "Drama", "Horror", "Sci-Fi"];
-
-  const handleSearch = (query) => {
-    console.log("Search query:", query);
-  };
-
-  const handleGenreSelect = (genre) => {
-    setSelectedGenre(genre);
-    console.log("Selected genre:", genre);
-  };
-
   return (
-    <div style={{ padding: "20px" }}>
-      <div style={{ display: "none" }}>
-        <h1> Counter Component </h1> <Counter initialValue={0} />{" "}
-        <h1> Search Form Component </h1>{" "}
-        <SearchForm initialQuery="Search here" onSearch={handleSearch} />{" "}
-        <h1> Genre Select Component </h1>{" "}
-        <GenreSelect
-          genres={genres}
-          selectedGenre={selectedGenre}
-          onSelect={handleGenreSelect}
-        />{" "}
-      </div>{" "}
-       <MovieHomePage />
-    </div>
+    <Router>
+      <div style={{ padding: "20px" }}>
+        <h1>Movie Search App</h1>
+        <Routes>
+          <Route path="/" element={<MovieHomePage />} />
+          <Route path="/movies/:movieId" component={MovieDetails} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
