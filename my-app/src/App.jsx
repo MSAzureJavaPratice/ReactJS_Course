@@ -1,22 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MovieHomePage from "./components/MovieHomePage/MovieHomePage";
+import AddMovieForm from "./components/AddMovie/AddMovieForm";
 import MovieDetails from "./components/MovieDetails/MovieDetails";
-import AddMovie from "./components/AddMovie/AddMovie";
-import EditMovie from "./components/EditMovie/EditMovie";
+import EditMovieDialog from "./components/EditMovie/EditMovieDialog";
 
 function App() {
+  const [movies, setMovies] = useState([]); // State to manage the movie list
+
   return (
     <Router>
-      <div style={{ padding: "20px" }}>
-        <h1>Movie Search App</h1>
-        <Routes>
-          <Route path="/" element={<MovieHomePage />} />
-          <Route path="/movies/:movieId" component={MovieDetails} />
-          <Route path="new" element={<AddMovie />} />
-          <Route path=":movieId/edit" element={<EditMovie />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route
+          path="/"
+          element={<MovieHomePage movies={movies} setMovies={setMovies} />}
+        >
+          <Route path="new" element={<AddMovieForm setMovies={setMovies} />} />
+          <Route
+            path="movies/:movieId/edit"
+            element={<EditMovieDialog movies={movies} setMovies={setMovies} />}
+          />
+        </Route>
+        <Route path="/movies/:movieId" element={<MovieDetails />} />
+      </Routes>
     </Router>
   );
 }
