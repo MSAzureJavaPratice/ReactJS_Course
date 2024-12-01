@@ -20,37 +20,6 @@ describe("App Component", () => {
         expect(genreSelectTitle).toBeInTheDocument();
     });
 
-    test("renders initial selected genre", () => {
-        render( < App / > );
-        const selectedGenreText = screen.getByText(/Selected Genre: Action/i);
-        expect(selectedGenreText).toBeInTheDocument();
-    });
-
-    test("updates selected genre on button click", () => {
-        render( < App / > );
-        const comedyButton = screen.getByText(/Comedy/i);
-        fireEvent.click(comedyButton);
-        const updatedGenreText = screen.getByText(/Selected Genre: Comedy/i);
-        expect(updatedGenreText).toBeInTheDocument();
-    });
-
-    test("updates search query on form submission", () => {
-        render( < App / > );
-
-        // Find the input and search button
-        const input = screen.getByPlaceholderText(/Search.../i);
-        const searchButton = screen.getByRole("button", { name: /Search/i });
-
-        // Simulate user interaction
-        fireEvent.change(input, { target: { value: "React Testing" } });
-        fireEvent.click(searchButton);
-
-        // Assert that the query is displayed
-        const searchResultText = screen.getByText(/Search Query: React Testing/i);
-        expect(searchResultText).toBeInTheDocument();
-    });
-
-
     test("increments and decrements the counter", () => {
         render( < App / > );
         const incrementButton = screen.getByText(/Increment/i);

@@ -1,0 +1,122 @@
+.movie-tile {
+    width: 280px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    /* This is necessary for positioning the menu */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.movie-tile img {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+}
+
+.movie-tile__menu {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.menu-button {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.movie-tile__menu-dropdown {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 5px;
+    top: 30px;
+    right: 0;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.movie-tile__menu-dropdown button {
+    background: none;
+    border: none;
+    padding: 5px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.movie-tile__menu-dropdown button:hover {
+    background-color: #f0f0f0;
+}
+
+.movie-tile__info {
+    margin-top: 10px;
+}
+
+.movie-tile__title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.movie-tile__name {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.movie-tile__year {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.movie-tile__genres {
+    font-size: 0.85rem;
+    color: #555;
+    text-align: center;
+    margin-top: 5px;
+}
+
+
+/* Hover effect for movie tile */
+
+.movie-tile:hover {
+    transform: scale(1.05);
+}
+
+.movie-tile:hover .movie-tile__menu-dropdown {
+    display: block;
+}
+
+.movie-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    margin: 10px;
+}
+
+.movie-tile img {
+    height: 200px;
+    /* Set the desired height */
+    width: 150px;
+    /* Optionally, set a fixed width */
+    object-fit: cover;
+    /* Ensures the image covers the area without stretching */
+    border-radius: 8px;
+    /* Optional: adds rounded corners */
+}
+
+.movie-tile h3 {
+    margin: 10px 0;
+}
+
+.movie-tile p {
+    margin: 5px 0;
+}
