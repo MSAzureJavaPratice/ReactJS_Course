@@ -33,7 +33,7 @@ const MovieTile = ({ movie, onClick, onEdit, onDelete }) => {
         )}
       </div>
       <div className="movie-tile__info">
-        <div className="movie-tile__title">{title}</div>
+        <div className="movie-tile__title" data-testid="movie-title">{title}</div>
         <div className="movie-tile__year">{release_date.split("-")[0]}</div>
         <div className="movie-tile__genres">{genres.join(", ")}</div>
       </div>
