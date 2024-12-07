@@ -138,7 +138,8 @@ const Main = () => {
         </div>
       </div>
       <div className="movie-list content-section">
-        {movies.map((movie) => (
+        {Array.isArray(movies) &&
+    movies.map((movie) =>  (
           <MovieTile
             key={movie.id}
             movie={movie}
