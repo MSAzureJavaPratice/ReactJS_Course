@@ -58,7 +58,7 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
   };
 
   return (
-    <form className="movie-form" onSubmit={handleSubmit(submitHandler)}>
+    <form className="movie-form" onSubmit={handleSubmit(submitHandler)} data-testid="movie-form">
       <div>
         <label>
           Title:
@@ -107,7 +107,7 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
       </div>
       <div>
         <label>
-          Runtime:
+        Runtime (minutes):
           <input
             type="number"
             {...register("runtime", {
