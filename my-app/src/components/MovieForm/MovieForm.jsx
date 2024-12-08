@@ -35,20 +35,26 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
   });
 
   useEffect(() => {
-    // Update form values and movieId if initialMovieInfo changes
-    reset({
-      title: initialMovieInfo.title || "",
-      release_date: initialMovieInfo.release_date || "",
-      genres: initialMovieInfo.genres || [],
-      runtime: initialMovieInfo.runtime || "",
-      overview: initialMovieInfo.overview || "",
-      vote_average: initialMovieInfo.vote_average || "",
-      poster_path: initialMovieInfo.poster_path || "",
-    });
-    setMovieId(initialMovieInfo.id || "");
+    // Prevent unnecessary resets by checking for actual changes
+    if (Object.keys(initialMovieInfo).length > 0) {
+      console.log("Resetting form with:", initialMovieInfo);
+
+      reset({
+        title: initialMovieInfo.title || "",
+        release_date: initialMovieInfo.release_date || "",
+        genres: initialMovieInfo.genres || [],
+        runtime: initialMovieInfo.runtime || "",
+        overview: initialMovieInfo.overview || "",
+        vote_average: initialMovieInfo.vote_average || "",
+        poster_path: initialMovieInfo.poster_path || "",
+      });
+
+      setMovieId(initialMovieInfo.id || "");
+    }
   }, [initialMovieInfo, reset]);
 
   const submitHandler = (data) => {
+    console.log('data submission: ' + JSON.stringify(data));
     onSubmit({
       ...data,
       id: movieId, // Include the movie ID in the submitted data
@@ -58,12 +64,21 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
   };
 
   return (
-    <form className="movie-form" onSubmit={handleSubmit(submitHandler)} data-testid="movie-form">
+    <form
+      className="movie-form"
+      onSubmit={handleSubmit(submitHandler)}
+      data-testid="movie-form"
+    >
       <div>
         <label>
           Title:
-          <input {...register("title", { required: "Title is required" })} />
-          {errors.title && <span className="error">{errors.title.message}</span>}
+          <input
+            {...register("title", { required: "Title is required" })}
+            data-testid="title"
+          />
+          {errors.title && (
+            <span className="error">{errors.title.message}</span>
+          )}
         </label>
       </div>
       <div>
@@ -71,7 +86,10 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
           Release Date:
           <input
             type="date"
-            {...register("release_date", { required: "Release date is required" })}
+            {...register("release_date", {
+              required: "Release date is required",
+            })}
+            data-testid="release_date"
           />
           {errors.release_date && (
             <span className="error">{errors.release_date.message}</span>
@@ -90,9 +108,13 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
                 multiple
                 value={value || []}
                 onChange={(e) => {
-                  const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
+                  const selectedOptions = Array.from(
+                    e.target.selectedOptions,
+                    (option) => option.value
+                  );
                   onChange(selectedOptions);
                 }}
+                data-testid="genres"
               >
                 {availableGenres.map((genre) => (
                   <option key={genre} value={genre}>
@@ -103,17 +125,20 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
             )}
           />
         </label>
-        {errors.genres && <span className="error">{errors.genres.message}</span>}
+        {errors.genres && (
+          <span className="error">{errors.genres.message}</span>
+        )}
       </div>
       <div>
         <label>
-        Runtime (minutes):
+          Runtime (minutes):
           <input
             type="number"
             {...register("runtime", {
               required: "Runtime is required",
               min: { value: 1, message: "Runtime must be at least 1 minute" },
             })}
+            data-testid="runtime"
           />
           {errors.runtime && (
             <span className="error">{errors.runtime.message}</span>
@@ -131,6 +156,7 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
               min: { value: 0, message: "Rating must be at least 0" },
               max: { value: 10, message: "Rating cannot exceed 10" },
             })}
+            data-testid="vote_average"
           />
           {errors.vote_average && (
             <span className="error">{errors.vote_average.message}</span>
@@ -148,6 +174,7 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
                 message: "Enter a valid image URL",
               },
             })}
+            data-testid="poster_path"
           />
           {errors.poster_path && (
             <span className="error">{errors.poster_path.message}</span>
@@ -161,15 +188,21 @@ const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
             rows="5"
             {...register("overview", {
               required: "Overview is required",
-              minLength: { value: 10, message: "Overview must be at least 10 characters" },
+              minLength: {
+                value: 10,
+                message: "Overview must be at least 10 characters",
+              },
             })}
+            data-testid="overview"
           />
           {errors.overview && (
             <span className="error">{errors.overview.message}</span>
           )}
         </label>
       </div>
-      <button type="submit">Submit</button>
+      <button type="submit" data-testid="submit-button">
+        Submit
+      </button>
     </form>
   );
 };

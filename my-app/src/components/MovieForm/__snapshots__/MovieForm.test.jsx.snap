@@ -4,13 +4,14 @@ exports[`MovieForm Component matches snapshot 1`] = `
 <DocumentFragment>
   <form
     class="movie-form"
+    data-testid="movie-form"
   >
     <div>
       <label>
         Title:
         <input
+          data-testid="title"
           name="title"
-          value=""
         />
       </label>
     </div>
@@ -18,9 +19,9 @@ exports[`MovieForm Component matches snapshot 1`] = `
       <label>
         Release Date:
         <input
-          name="releaseDate"
+          data-testid="release_date"
+          name="release_date"
           type="date"
-          value=""
         />
       </label>
     </div>
@@ -28,8 +29,8 @@ exports[`MovieForm Component matches snapshot 1`] = `
       <label>
         Genre:
         <select
+          data-testid="genres"
           multiple=""
-          name="genre"
         >
           <option
             value="Action"
@@ -78,9 +79,9 @@ exports[`MovieForm Component matches snapshot 1`] = `
       <label>
         Runtime (minutes):
         <input
+          data-testid="runtime"
           name="runtime"
           type="number"
-          value=""
         />
       </label>
     </div>
@@ -88,10 +89,10 @@ exports[`MovieForm Component matches snapshot 1`] = `
       <label>
         Rating:
         <input
-          name="rating"
+          data-testid="vote_average"
+          name="vote_average"
           step="0.1"
           type="number"
-          value=""
         />
       </label>
     </div>
@@ -99,8 +100,8 @@ exports[`MovieForm Component matches snapshot 1`] = `
       <label>
         Poster URL:
         <input
-          name="posterPath"
-          value=""
+          data-testid="poster_path"
+          name="poster_path"
         />
       </label>
     </div>
@@ -108,12 +109,14 @@ exports[`MovieForm Component matches snapshot 1`] = `
       <label>
         Overview:
         <textarea
+          data-testid="overview"
           name="overview"
           rows="5"
         />
       </label>
     </div>
     <button
+      data-testid="submit-button"
       type="submit"
     >
       Submit
