@@ -30,6 +30,13 @@
     border: solid whitesmoke;
 }
 
+.dialog-header h2 {
+    color: red;
+    /* Ensure the title text is white */
+    margin: 0;
+    /* Optional: remove margin for a cleaner look */
+}
+
 .dialog-close {
     background: transparent;
     border: none;
