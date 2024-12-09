@@ -1,0 +1,8 @@
+.sort-control {
+    margin-bottom: 20px;
+}
+
+.sort-control select {
+    margin-top: 1rem;
+    background-color: red;
+}
