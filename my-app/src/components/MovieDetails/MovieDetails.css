@@ -1,0 +1,13 @@
+.movie-details {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.movie-details__image {
+  width: 300px;
+}
+
+.movie-details__info {
+  max-width: 600px;
+}
