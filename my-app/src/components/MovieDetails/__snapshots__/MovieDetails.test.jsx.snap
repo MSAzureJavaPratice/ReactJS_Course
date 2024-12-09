@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MovieDetails Component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="movie-details"
+  >
+    <img
+      alt="Inception"
+      class="movie-details__image"
+      src="https://via.placeholder.com/150"
+    />
+    <div
+      class="movie-details__info"
+    >
+      <h2>
+        Inception
+      </h2>
+      <p>
+        Release Date: 2010
+      </p>
+      <p>
+        Rating: 8.8
+      </p>
+      <p>
+        Runtime: 148 minutes
+      </p>
+      <p>
+        A thief who steals corporate secrets...
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;
