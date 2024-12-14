@@ -1,0 +1,10 @@
+button {
+  margin-right: 10px;
+  background-color: lightgray;
+  color: black;
+}
+
+button.selected {
+  background-color: blue;
+  color: white;
+}

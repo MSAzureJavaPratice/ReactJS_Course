@@ -1,0 +1,55 @@
+/* GenreSelect.css */
+
+.genre-select-container {
+    display: flex;
+    justify-content: start;
+    /* Center the genre tabs horizontally */
+    gap: 1rem;
+    /* Reduced gap between tabs */
+    padding: 0.5rem;
+    /* Reduced padding around the container */
+    background-color: black;
+    /* Set background to black */
+}
+
+.genre-option {
+    padding: 0.3rem 1rem;
+    /* Reduced padding on each tab */
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    color: red;
+    /* Set text color to red */
+    transition: all 0.3s ease;
+    /* Smooth transition for color and background */
+    border-bottom: 2px solid transparent;
+    /* Bottom border to indicate the tab */
+}
+
+.genre-option.active {
+    color: red;
+    /* Keep text color red when active */
+    border-bottom: 2px solid red;
+    /* Bottom border when active */
+    transform: translateY(-2px);
+    /* Slightly raise the tab */
+}
+
+.genre-option:hover {
+    color: red;
+    /* Text color on hover */
+    border-bottom: 2px solid red;
+    /* Show red underline on hover */
+    transform: translateY(-2px);
+    /* Slightly raise the tab on hover */
+}
+
+.genre-option:active {
+    color: #ff4d4d;
+    /* Darker red text color when the tab is clicked */
+    border-bottom: 2px solid #ff4d4d;
+    /* Bottom border when clicked */
+}
